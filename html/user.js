@@ -23,6 +23,10 @@ function decrypt(message = '', key = '') {
   return decryptedMessage;
 }
 
+function makeId() {
+  return Math.floor(Math.random() * (999999999 - 100000000) + 1000000);
+}
+
 // Query DOM
 var message = document.getElementById('message'),
   btn = document.getElementById('send'),
@@ -82,7 +86,13 @@ socket.on('chat', function(data) {
     let text = decrypt(data.message, enckey);
     // Simple check to see if key is valid
     if (text !== null) {
-      output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + text + '</p>';
+      let randomidMsg = makeId().toString();
+      let randomidUsr = makeId().toString();
+      output.innerHTML += `<p id="${randomidMsg}"><strong id="${randomidUsr}"></strong></p>`;
+      let user = document.getElementById(randomidUsr);
+      let msg = document.getElementById(randomidMsg);
+      user.innerText = `${data.handle}: `;
+      msg.append(text);
     }
   }
 });
