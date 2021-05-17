@@ -1,35 +1,34 @@
-// Express web server for backend
-const express = require('express');
-// Socket.io for web socket interaction
+const express = require('express'); // look for express in file
 const socket = require('socket.io');
 
-// Initilize app
+// Initialize app and server
 const app = express();
-
-let port = 8080; // define port for easy change
-
-const server = app.listen(port, function() {
-  console.log('socket open on port ' + port)
+const debug = false;
+const port = 8080;
+const server = app.listen(port, function(){
+    if (debug) {
+      console.log(`Listening on port ${port}`);
+    }
+    console.log('running');
 });
 
-// Static files for web application
+// Static files
 app.use(express.static('html'));
 
-// Socket handler
+// Socket setup
 const io = socket(server);
+io.on('connection', function(socket){
+    if (debug) {
+      console.log('made socket connection', socket.id);
+    }
 
-io.on('connection', function(socket) {
-  if (debug) {
-    console.log('socket connection created: ', socket.id);
-  }
-  
-  // Implement chat feature
-  socket.on('chat', function(data) {
-    io.sockets.emit('chat', data);
-  });
+    // Broadcast chat
+    socket.on('chat', function(data){
+        io.sockets.emit('chat', data);
+    });
 
-  // Implement typing feature
-  socket.on('typing', function(data) {
-    socket.broadcast.emit('typing', data);
-  });
-})
+    // Broadcast typing
+    socket.on('typing', function(data){
+        socket.broadcast.emit('typing', data);
+    });
+});
