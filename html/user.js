@@ -64,7 +64,10 @@ btn.addEventListener('click', function() {
 });
 
 // Attach event listener to message input field
-message.addEventListener('keypress', function() {
+message.addEventListener('keypress', function(e) {
+  if (e.key === "Enter") {
+    btn.click();
+  }
   socket.emit('typing', {
     handle: handle,
     room: room

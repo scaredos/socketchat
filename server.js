@@ -1,5 +1,4 @@
 const express = require('express'); // look for express in file
-const socket = require('socket.io');
 
 // Initialize app and server
 const app = express();
@@ -11,12 +10,15 @@ const server = app.listen(port, function(){
     }
     console.log('running');
 });
+const io = require("socket.io")(server, {
+  allowEIO3: true // false by default
+});
 
 // Static files
 app.use(express.static('html'));
 
 // Socket setup
-const io = socket(server);
+//const io = socket(server);
 io.on('connection', function(socket){
     if (debug) {
       console.log('made socket connection', socket.id);
