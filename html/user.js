@@ -1,10 +1,5 @@
-const proto = window.location.protocol
-const host = window.location.host;
-const port = window.location.port;
-const url = `${proto}//${host}:${port}`
-
 // Make connection to websocket server
-const socket = io.connect(url);
+const socket = io.connect(window.location.href);
 
 function encrypt(message = '', key = '') {
   // Disallow spam of blank messages
